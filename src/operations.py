@@ -7,10 +7,24 @@ def swap_command(stack: deque):
         stack.append(last)
         stack.append(before_last)
     else:
-        last = self.stack.pop()
+        last = stack.pop()
         before_last = 0
         stack.append(last)
         stack.append(before_last)
+
+def horizontal_if_command(value):
+    if value:
+        current_direction = '<'
+    else:
+        current_direction = '>'
+    return current_direction
+
+def vertical_if_command(value):
+    if value:
+        current_direction = '^'
+    else:
+        current_direction = 'v'
+    return current_direction
 
 ARITMETIC_OPERATIONS = {
     '-': lambda x, y: x - y,
@@ -26,3 +40,7 @@ UNARY_OPERATIONS = {
     '!': lambda x: not x
 }
 
+IF_OPERATIONS= {
+    '_': horizontal_if_command,
+    '|': vertical_if_command
+}

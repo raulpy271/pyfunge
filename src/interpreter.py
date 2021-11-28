@@ -59,6 +59,7 @@ class BefungeInterpreter:
                     operations.swap_command(self.stack)
                 else:
                     err = exceptions.EmptyStack
+                    break
             elif command == 'p':
                 y = self.stack.pop()
                 x = self.stack.pop()
@@ -80,24 +81,13 @@ class BefungeInterpreter:
                 operation = operations.UNARY_OPERATIONS[command]
                 first = self.stack.pop()
                 self.stack.append(int(operation(first)))
-            elif command == '_':
+            elif command in operations.IF_OPERATIONS: 
                 if len(self.stack):
                     value = self.stack.pop()
-                    if value:
-                        self.current_direction = '<'
-                    else:
-                        self.current_direction = '>'
+                    self.current_direction = operations.IF_OPERATIONS[command](value)
                 else:
-                    self.current_direction = '>'
-            elif command == '|':
-                if len(self.stack):
-                    value = self.stack.pop()
-                    if value:
-                        self.current_direction = '^'
-                    else:
-                        self.current_direction = 'v'
-                else:
-                    self.current_direction = 'v'
+                    err = exceptions.EmptyStack
+                    break
             elif command == ':':
                 if len(self.stack):
                     value = self.stack.pop()
