@@ -12,4 +12,15 @@ def input_integer_command(stdInput, prompt_digit: str, stack: deque) -> Union[No
             return exceptions.WrongInput
     else:
         return exceptions.EmptyInput
-    
+
+def input_char_command(stdInput, prompt_char: str, stack: deque) -> Union[None, Exception] :
+    value = stdInput(prompt_char)
+    if value:
+        stack.append(ord(value[0]))
+    else:
+        return exceptions.EmptyInput
+
+COMMANDS = {
+    '&': input_integer_command,
+    '~': input_char_command
+}

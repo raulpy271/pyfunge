@@ -4,6 +4,7 @@ from random import choice
 from src import operations
 from src import exceptions
 from src import inpure_operations
+from src import messages
 
 
 class BefungeInterpreter:
@@ -15,8 +16,6 @@ class BefungeInterpreter:
         self.output = output
         self.string_mode = False
         self.stdInput = stdInput
-        self.prompt_digit = "Input digit: "
-        self.prompt_char = "Input char: "
         
     def load(self, code):
         lines = code.split('\n')
@@ -60,8 +59,10 @@ class BefungeInterpreter:
                 self.current_direction = random_direction
             elif command == '$':
                 self.stack.pop()
-            elif command == '&':
-                err_input = inpure_operations.input_integer_command(self.stdInput, self.prompt_digit, self.stack)
+            elif command in inpure_operations.COMMANDS:
+                prompt = messages.PROMPT_MSG[command]
+                command = inpure_operations.COMMANDS[command]
+                err_input = command(self.stdInput, prompt, self.stack)
                 if err_input:
                     err = err_input
                     break
