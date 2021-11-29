@@ -3,16 +3,20 @@ from random import choice
 
 from src import operations
 from src import exceptions
+from src import inpure_operations
 
 
 class BefungeInterpreter:
-    def __init__(self, output = ''):
+    def __init__(self, output = '', stdInput=input):
         self.stack = deque()
         self.commands = [[]]
         self.current_location = [0, -1]
         self.current_direction = '>'
         self.output = output
         self.string_mode = False
+        self.stdInput = stdInput
+        self.prompt_digit = "Input digit: "
+        self.prompt_char = "Input char: "
         
     def load(self, code):
         lines = code.split('\n')
@@ -43,7 +47,11 @@ class BefungeInterpreter:
             elif command.isdigit():
                 self.stack.append(int(command))
             elif command == '.':
-                self.output += str(self.stack.pop())
+                if len(self.stack):
+                    self.output += str(self.stack.pop())
+                else:
+                    err = exceptions.EmptyStack
+                    break
             elif command == ',':
                 value = self.stack.pop()
                 self.output += str(bytes([value]), 'ascii')
@@ -52,6 +60,11 @@ class BefungeInterpreter:
                 self.current_direction = random_direction
             elif command == '$':
                 self.stack.pop()
+            elif command == '&':
+                err_input = inpure_operations.input_integer_command(self.stdInput, self.prompt_digit, self.stack)
+                if err_input:
+                    err = err_input
+                    break
             elif command == '#':
                 self.next_command()
             elif command == '\\':
