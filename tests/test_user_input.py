@@ -41,4 +41,32 @@ class TestGetIntegerCommand(TestCase):
         stack, output, err = interpreter.run()
         self.assertEqual(err, exceptions.WrongInput)
 
+class TestGetCharCommand(TestCase):
+    def test_get_char(self):
+        code = '~ ,@'
+        inputMock = mock.Mock()
+        inputMock.return_value = 'A'
+        interpreter = BefungeInterpreter(stdInput=inputMock)
+        interpreter.load(code)
+        stack, output, err = interpreter.run()
+        self.assertEqual(output, 'A')
+
+    def test_get_char_using_ascii_value(self):
+        code = '~ .@'
+        inputMock = mock.Mock()
+        inputMock.return_value = 'A'
+        A_char_ascii_value = 65
+        interpreter = BefungeInterpreter(stdInput=inputMock)
+        interpreter.load(code)
+        stack, output, err = interpreter.run()
+        self.assertEqual(int(output), A_char_ascii_value)
+
+    def test_get_char_with_empty_input(self):
+        code = '~ ,@'
+        inputMock = mock.Mock()
+        inputMock.return_value = ''
+        interpreter = BefungeInterpreter(stdInput=inputMock)
+        interpreter.load(code)
+        stack, output, err = interpreter.run()
+        self.assertEqual(err, exceptions.EmptyInput)
 
