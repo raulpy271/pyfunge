@@ -19,7 +19,15 @@ class BefungeInterpreter:
         
     def load(self, code):
         lines = code.split('\n')
-        self.commands = list(map(lambda line: list(line), lines))
+        grid_without_fixed_len = list(map(lambda line: list(line), lines))
+        size_of_each_line = map(len, grid_without_fixed_len)
+        max_size = max(size_of_each_line)
+        grid_with_fixed_len = []
+        for line in grid_without_fixed_len:
+            remaining_cells = (max_size - len(line))
+            spaces = [' '] * remaining_cells
+            grid_with_fixed_len.append(line + spaces)
+        self.commands = grid_with_fixed_len
     
     def get_current_command(self):
         return self.commands[self.current_location[0]][self.current_location[1]]
