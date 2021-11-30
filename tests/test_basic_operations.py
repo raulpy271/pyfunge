@@ -66,6 +66,18 @@ class TestMovements(TestCase):
         stack, output, err = interpreter.run()
         self.assertEqual(output, '1')
 
+    def test_wraps_the_page(self):
+        code = (
+            'v    > 1.@ ' + '\n' \
+            '>    v     ' + '\n' \
+            '           ' + '\n' \
+            '           ' + '\n' \
+        )
+        interpreter = BefungeInterpreter()
+        interpreter.load(code)
+        stack, output, err = interpreter.run()
+        self.assertEqual(output, '1', "The PC should wraps the page vertically")
+
 
 class TestConditinals(TestCase):
     def test_horizontal_if(self):
