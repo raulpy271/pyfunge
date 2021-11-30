@@ -14,8 +14,8 @@ class TestParserOfGrid(TestCase):
         interpreter = BefungeInterpreter()
         interpreter.load(code_with_10_size)
         first_len = 0
-        first_len = len(interpreter.commands[0])
-        for line in interpreter.commands[1:]:
+        first_len = len(interpreter.playfield[0])
+        for line in interpreter.playfield[1:]:
             self.assertEqual(first_len, len(line), "All lines should have the same fixed size")
 
     def test_playfield_have_needded_spaces(self):
@@ -32,4 +32,3 @@ class TestParserOfGrid(TestCase):
         self.assertEqual(output, '5')
         self.assertFalse(err)
         
-

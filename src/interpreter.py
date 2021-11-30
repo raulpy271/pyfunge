@@ -10,8 +10,8 @@ from src import messages
 class BefungeInterpreter:
     def __init__(self, output = '', stdInput=input):
         self.stack = deque()
-        self.commands = [[]]
-        self.current_location = [0, -1]
+        self.playfield = [[]]
+        self.PC = [0, -1]
         self.current_direction = '>'
         self.output = output
         self.string_mode = False
@@ -27,20 +27,20 @@ class BefungeInterpreter:
             remaining_cells = (max_size - len(line))
             spaces = [' '] * remaining_cells
             grid_with_fixed_len.append(line + spaces)
-        self.commands = grid_with_fixed_len
+        self.playfield = grid_with_fixed_len
     
     def get_current_command(self):
-        return self.commands[self.current_location[0]][self.current_location[1]]
+        return self.playfield[self.PC[0]][self.PC[1]]
     
     def next_command(self):
         if self.current_direction == '>':
-            self.current_location = self.current_location[0], self.current_location[1] + 1
+            self.PC = self.PC[0], self.PC[1] + 1
         elif self.current_direction == '<':
-            self.current_location = self.current_location[0], self.current_location[1] - 1
+            self.PC = self.PC[0], self.PC[1] - 1
         elif self.current_direction == 'v':
-            self.current_location = self.current_location[0] + 1, self.current_location[1]
+            self.PC = self.PC[0] + 1, self.PC[1]
         elif self.current_direction == '^':
-            self.current_location = self.current_location[0] - 1, self.current_location[1]
+            self.PC = self.PC[0] - 1, self.PC[1]
         return self.get_current_command()
     
     def run(self):
@@ -86,11 +86,11 @@ class BefungeInterpreter:
                 y = self.stack.pop()
                 x = self.stack.pop()
                 value = self.stack.pop()
-                self.commands[y][x] = str(bytes([value]), 'ascii')
+                self.playfield[y][x] = str(bytes([value]), 'ascii')
             elif command == 'g':
                 y = self.stack.pop()
                 x = self.stack.pop()
-                value =  self.commands[y][x]
+                value =  self.playfield[y][x]
                 self.stack.append(ord(value))
             elif command in '><v^':
                 self.current_direction = command
