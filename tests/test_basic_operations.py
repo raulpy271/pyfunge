@@ -66,17 +66,57 @@ class TestMovements(TestCase):
         stack, output, err = interpreter.run()
         self.assertEqual(output, '1')
 
-    def test_wraps_the_page(self):
-        code = (
+    def test_wraps_the_page_down_to_up(self):
+        wraps_vertically = (
             'v    > 1.@ ' + '\n' \
             '>    v     ' + '\n' \
             '           ' + '\n' \
             '           ' + '\n' \
         )
         interpreter = BefungeInterpreter()
-        interpreter.load(code)
+        interpreter.load(wraps_vertically)
         stack, output, err = interpreter.run()
         self.assertEqual(output, '1', "The PC should wraps the page vertically")
+        self.assertFalse(err)
+
+    def test_wraps_the_page_up_to_down(self):
+        wraps_vertically = (
+            '     ^     ' + '\n' \
+            '     @     ' + '\n' \
+            '     .     ' + '\n' \
+            '     1     ' + '\n' \
+        )
+        interpreter = BefungeInterpreter()
+        interpreter.load(wraps_vertically)
+        stack, output, err = interpreter.run()
+        self.assertEqual(output, '1', "The PC should wraps the page vertically")
+        self.assertFalse(err)
+
+    def test_wraps_the_page_rigth_to_left(self):
+        wraps_horizontally = (
+            '   v       ' + '\n' \
+            '@  >     1.' + '\n' \
+            '           ' + '\n' \
+            '           ' + '\n' \
+        )
+        interpreter = BefungeInterpreter()
+        interpreter.load(wraps_horizontally)
+        stack, output, err = interpreter.run()
+        self.assertEqual(output, '1', "The PC should wraps the page horizontally")
+        self.assertFalse(err)
+
+    def test_wraps_the_page_left_to_rigth(self):
+        wraps_horizontally = (
+            '   v       ' + '\n' \
+            '.1 <      @' + '\n' \
+            '           ' + '\n' \
+            '           ' + '\n' \
+        )
+        interpreter = BefungeInterpreter()
+        interpreter.load(wraps_horizontally)
+        stack, output, err = interpreter.run()
+        self.assertEqual(output, '1', "The PC should wraps the page horizontally")
+        self.assertFalse(err)
 
 
 class TestConditinals(TestCase):
