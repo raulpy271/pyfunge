@@ -30,17 +30,31 @@ class BefungeInterpreter:
         self.playfield = grid_with_fixed_len
     
     def get_current_command(self):
+        if (self.PC[0] < 0 or self.PC[1] < 0 or self.PC[0] >= len(self.playfield) or self.PC[1] >= len(self.playfield[0])):
+            raise Exception("Invalid")
         return self.playfield[self.PC[0]][self.PC[1]]
     
     def next_command(self):
         if self.current_direction == '>':
-            self.PC = self.PC[0], self.PC[1] + 1
+            if (self.PC[1] + 1 >= len(self.playfield[0])):
+                self.PC = self.PC[0], 0
+            else:
+                self.PC = self.PC[0], self.PC[1] + 1
         elif self.current_direction == '<':
-            self.PC = self.PC[0], self.PC[1] - 1
+            if (self.PC[1] - 1 < 0):
+                self.PC = self.PC[0], len(self.playfield[0]) - 1
+            else:
+                self.PC = self.PC[0], self.PC[1] - 1
         elif self.current_direction == 'v':
-            self.PC = self.PC[0] + 1, self.PC[1]
+            if (self.PC[0] + 1 >= len(self.playfield)):
+                self.PC = 0, self.PC[1]
+            else:
+                self.PC = self.PC[0] + 1, self.PC[1]
         elif self.current_direction == '^':
-            self.PC = self.PC[0] - 1, self.PC[1]
+            if (self.PC[0] - 1 < 0):
+                self.PC = len(self.playfield) - 1, self.PC[1]
+            else:
+                self.PC = self.PC[0] - 1, self.PC[1]
         return self.get_current_command()
     
     def run(self):
