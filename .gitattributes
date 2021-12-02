@@ -1,1 +1,2 @@
-*.bf linguist-language=Befunge
+  *.bf linguist-language=Befunge
+  *.rb linguist-language=Java
