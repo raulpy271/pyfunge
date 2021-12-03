@@ -2,57 +2,67 @@ from unittest import TestCase
 
 from src.interpreter import BefungeInterpreter
 from src import exceptions
+from tests.mock.stdout_mock import StdoutMock
 
 class TestAritmethicOperatrions(TestCase):
     def test_sum(self):
         code = '22+.@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '4')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '4')
 
     def test_sub(self):
         code = '22-.@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '0')
+        interpreter.load(code)
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '0')
 
     def test_multiply(self):
         code = '23*.@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '6')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '6')
 
     def test_swap(self):
         code = '12\..@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '12')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '12')
 
     def test_swap_without_elements(self):
         code = '\@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
+        stack, err = interpreter.run()
         self.assertTrue(err and err == exceptions.EmptyStack)
+        self.assertFalse(stdout_mock.read())
 
     def test_swap_with_only_one_element(self):
         code = '1\..@'
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '01')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '01')
 
 class TestMovements(TestCase):
     def test_left_and_rigth(self):
         code = ">21  #@ . <"
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '12')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '12')
 
     def test_up_and_down(self):
         code = (
@@ -61,10 +71,11 @@ class TestMovements(TestCase):
             '   1 ' + '\n' \
             '>  ^ ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1')
 
     def test_wraps_the_page_down_to_up(self):
         wraps_vertically = (
@@ -73,10 +84,11 @@ class TestMovements(TestCase):
             '           ' + '\n' \
             '           ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(wraps_vertically)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1', "The PC should wraps the page vertically")
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1', "The PC should wraps the page vertically")
         self.assertFalse(err)
 
     def test_wraps_the_page_up_to_down(self):
@@ -86,10 +98,11 @@ class TestMovements(TestCase):
             '     .     ' + '\n' \
             '     1     ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(wraps_vertically)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1', "The PC should wraps the page vertically")
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1', "The PC should wraps the page vertically")
         self.assertFalse(err)
 
     def test_wraps_the_page_rigth_to_left(self):
@@ -99,10 +112,11 @@ class TestMovements(TestCase):
             '           ' + '\n' \
             '           ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(wraps_horizontally)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1', "The PC should wraps the page horizontally")
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1', "The PC should wraps the page horizontally")
         self.assertFalse(err)
 
     def test_wraps_the_page_left_to_rigth(self):
@@ -112,10 +126,11 @@ class TestMovements(TestCase):
             '           ' + '\n' \
             '           ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(wraps_horizontally)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1', "The PC should wraps the page horizontally")
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1', "The PC should wraps the page horizontally")
         self.assertFalse(err)
 
 
@@ -131,15 +146,17 @@ class TestConditinals(TestCase):
             '         ' + '\n' \
             '  @.1_0.@' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(if_with_true_value)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1')
 
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(if_with_false_value)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '0')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '0')
 
     def test_vertical_if(self):
         if_with_true_value = (
@@ -154,13 +171,15 @@ class TestConditinals(TestCase):
             '>     |     ' + '\n' \
             '      > 0.@ ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(if_with_true_value)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '1')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '1')
 
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(if_with_false_value)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '0')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '0')
 

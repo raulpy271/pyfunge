@@ -1,6 +1,7 @@
-from unittest import TestCase, mock
+from unittest import TestCase
 
 from src.interpreter import BefungeInterpreter
+from tests.mock.stdout_mock import StdoutMock
 
 class TestParserOfGrid(TestCase):
     def test_playfield_have_fixed_size(self):
@@ -26,9 +27,10 @@ class TestParserOfGrid(TestCase):
             '     .    ' + '\n' \
             '     @    ' + '\n' \
         )
-        interpreter = BefungeInterpreter()
+        stdout_mock = StdoutMock()
+        interpreter = BefungeInterpreter(output=stdout_mock)
         interpreter.load(code_without_needded_spaces)
-        stack, output, err = interpreter.run()
-        self.assertEqual(output, '5')
+        stack, err = interpreter.run()
+        self.assertEqual(stdout_mock.read(), '5')
         self.assertFalse(err)
         
