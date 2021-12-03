@@ -31,8 +31,6 @@ class BefungeInterpreter:
         self.playfield = grid_with_fixed_len
     
     def get_current_command(self):
-        if (self.PC[0] < 0 or self.PC[1] < 0 or self.PC[0] >= len(self.playfield) or self.PC[1] >= len(self.playfield[0])):
-            raise Exception("Invalid")
         return self.playfield[self.PC[0]][self.PC[1]]
     
     def next_command(self):
