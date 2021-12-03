@@ -1,5 +1,6 @@
 from collections import deque
 from random import choice
+from sys import stdout
 
 from src import operations
 from src import exceptions
@@ -8,7 +9,7 @@ from src import messages
 
 
 class BefungeInterpreter:
-    def __init__(self, output = '', stdInput=input):
+    def __init__(self, output=stdout, stdInput=input):
         self.stack = deque()
         self.playfield = [[]]
         self.PC = [0, -1]
@@ -69,13 +70,13 @@ class BefungeInterpreter:
                 self.stack.append(int(command))
             elif command == '.':
                 if len(self.stack):
-                    self.output += str(self.stack.pop())
+                    self.output.write(str(self.stack.pop()))
                 else:
                     err = exceptions.EmptyStack
                     break
             elif command == ',':
                 value = self.stack.pop()
-                self.output += str(bytes([value]), 'ascii')
+                self.output.write(str(bytes([value]), 'ascii'))
             elif command == '?':
                 random_direction = choice(list('^v><'))
                 self.current_direction = random_direction
@@ -137,6 +138,6 @@ class BefungeInterpreter:
                 pass
             else:
                 raise Exception(f"No support to {command}")
-        return self.stack, self.output, err
+        return self.stack, err
 
 
