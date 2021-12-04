@@ -18,11 +18,11 @@ if __name__ == '__main__':
         code = f.read()
     iterpreter = BefungeInterpreter()
     iterpreter.load(code)
-    queue, err = iterpreter.run()
+    stack, err = iterpreter.run()
     if err:
         raise err()
     if verbose:
-        print(f"\nQueue:\n{queue}")
+        print(f"\nStack:\n{stack}")
         print_playfield(iterpreter.playfield)
     
 
