@@ -7,7 +7,7 @@ def input_integer_command(stdInput, prompt_digit: str, stack: deque) -> Union[No
     value = stdInput(prompt_digit)
     if value:
         if value.isdigit():
-            stack.append(int(value[0]))
+            stack.append(int(value))
         else:
             return exceptions.WrongInput
     else:

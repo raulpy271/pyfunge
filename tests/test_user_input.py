@@ -16,15 +16,15 @@ class TestGetIntegerCommand(TestCase):
         self.assertEqual(stdout_mock.read(), '1')
 
     def test_get_integer_with_two_digits(self):
-        code = '& ..@'
+        code = '& .@'
         inputMock = mock.Mock()
         stdout_mock = StdoutMock()
         inputMock.return_value = '11'
         interpreter = BefungeInterpreter(stdInput=inputMock, output=stdout_mock)
         interpreter.load(code)
         stack, err = interpreter.run()
-        self.assertEqual(stdout_mock.read(), '1')
-        self.assertEqual(err, exceptions.EmptyStack)
+        self.assertEqual(stdout_mock.read(), '11')
+        self.assertFalse(err)
 
     def test_get_integer_with_empty_input(self):
         code = '& .@'
