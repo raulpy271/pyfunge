@@ -1,6 +1,6 @@
 # pyfunge
 
-An Interpreter of the language Befunge written in Python. This language is an [esoteric](https://esolangs.org/wiki/Main_Page) language that was created to demonstrate the difficulty of creating a compiller. Also, the language is simple because it only has a small set of commands, but they are a bit different from commom languages, so the code is weird.
+An Interpreter of the language Befunge-93 written in Python. This language is an [esoteric](https://esolangs.org/wiki/Main_Page) language that was created to demonstrate the difficulty of creating a compiller. Also, the language is simple because it only has a small set of commands, but they are a bit different from commom languages, so the code is weird.
 
 The language is made up of a stack, so you don't store values in variables, you push/pop values into a global stack. In commom language each command has an order and you run the commands one after the other, in a single order. But in Befunge, the code are placed in a 2D grid, so you have four different execution flows, from left to right, from right to left, bottom to top and top to bottom. The below program prints `1` using the normal flow and then prints `2` following the top to down flow.
 
@@ -18,7 +18,19 @@ If you want to know how the language work and how to program on it, see the foll
 
 # Execution
 
+To run a Befunge program you should have an python runtime in your computer. The following command run a "hello world" program:
 
+```
+$ python run.py examples/hello_world.bf
+```
+
+The above code is(`examples/hello_world.bf`):
+
+```bf
+64+"!dlroW ,olleH">:#,_@
+```
+
+Jump to the [`examples/`](examples/) directory to see more code examples.
 
 # Self-modification
 
