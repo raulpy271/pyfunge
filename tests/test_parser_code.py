@@ -3,6 +3,7 @@ from unittest import TestCase
 from src.interpreter import BefungeInterpreter
 from tests.mock.stdout_mock import StdoutMock
 
+
 class TestParserOfGrid(TestCase):
     def test_playfield_have_fixed_size(self):
         code_with_10_size = (
@@ -34,3 +35,4 @@ class TestParserOfGrid(TestCase):
         self.assertEqual(stdout_mock.read(), '5')
         self.assertFalse(err)
         
+

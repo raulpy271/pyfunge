@@ -4,6 +4,7 @@ from src.interpreter import BefungeInterpreter
 from src import exceptions
 from tests.mock.stdout_mock import StdoutMock
 
+
 class TestGetIntegerCommand(TestCase):
     def test_get_integer(self):
         code = '& .@'
@@ -80,4 +81,5 @@ class TestGetCharCommand(TestCase):
         stack, err = interpreter.run()
         self.assertEqual(err, exceptions.EmptyInput)
         self.assertFalse(stdout_mock.read())
+
 
